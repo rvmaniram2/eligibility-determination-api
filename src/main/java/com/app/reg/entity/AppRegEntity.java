@@ -1,5 +1,7 @@
 package com.app.reg.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +31,7 @@ public class AppRegEntity {
 	@Column(name = "PHNO")
 	private String phno;
 	@Column(name = "DOB")
-	private String dob;
+	private Date dob;
 	@Column(name = "GENDER")
 	private String gender;
 	@Column(name = "SSN")

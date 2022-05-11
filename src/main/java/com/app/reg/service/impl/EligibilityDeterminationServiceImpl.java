@@ -1,7 +1,13 @@
 package com.app.reg.service.impl;
 
+import static java.util.Calendar.DATE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -96,8 +102,9 @@ public class EligibilityDeterminationServiceImpl implements EligibilityDetermina
 		}
 
 		else if (plan.getPlanName().equalsIgnoreCase("Medicare")) {
-
-			if (income.getSalaryIncome() <= 300)
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			if (getDiffYears(new Date(), user.getDob()) > 65)
 				return updateEligibilityData(true, "Medicare", user, null);
 			else
 				return updateEligibilityData(false, "Medicare", user, "age is below 65");
@@ -110,6 +117,22 @@ public class EligibilityDeterminationServiceImpl implements EligibilityDetermina
 		}
 
 		return null;
+	}
+
+	public static int getDiffYears(Date first, Date last) {
+		Calendar a = getCalendar(first);
+		Calendar b = getCalendar(last);
+		int diff = b.get(YEAR) - a.get(YEAR);
+		if (a.get(MONTH) > b.get(MONTH) || (a.get(MONTH) == b.get(MONTH) && a.get(DATE) > b.get(DATE))) {
+			diff--;
+		}
+		return diff;
+	}
+
+	public static Calendar getCalendar(Date date) {
+		Calendar cal = Calendar.getInstance(Locale.US);
+		cal.setTime(date);
+		return cal;
 	}
 
 	public PlanInfoDto updateEligibilityData(boolean flag, String status, AppRegEntity user, String reason) {
